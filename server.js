@@ -14,9 +14,11 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
+require('./env.js');
 var app = express();
   //lets require/import the mongodb native drivers.
   var mongodb = require('mongodb');
+  
 
   //We need to work with "MongoClient" interface in order to connect to a mongodb server.
   var MongoClient = mongodb.MongoClient;
@@ -24,7 +26,8 @@ var app = express();
 var COMMENTS_FILE = path.join(__dirname, 'tasks.json');
   // Connection URL. This is where your mongodb server is running.
   //var url = 'mongodb://localhost:27017/my_database_name';
- 
+  var url = process.env['MONGOCS'];
+  console.log(url);
 
 app.set('port', (process.env.PORT || 3000));
 
