@@ -104,12 +104,11 @@ app.put('/api/tasks/', function(req, res) {
              db.collection('tasks').updateOne(
               { "context" : "12344"},
               {
-                $set: { "text": "WHOOOOOO" },
+                $set: { "text": "WHOOOOOO", "complete" : req.body.complete },
                 $currentDate: { "lastModified": true }
               }, function(err, results) {
                 console.log(err);
-                console.log("ok:  " + results);
-                console.log("modified:  " + results.nModified);
+                console.log("update results:  " + results);
               
            });
 

@@ -26,7 +26,7 @@ var TaskCheckbox = React.createClass({
   },
   handleChange: function(e) {
     console.log('changed');
-    console.log(this.state.complete);
+    console.log(!this.state.complete);
     console.log(this.props.taskId);
     this.setState({complete: !this.state.complete});
 
@@ -36,7 +36,7 @@ var TaskCheckbox = React.createClass({
       dataType: 'json',
       cache: false,
       type: 'PUT',
-      data: {taskId: this.props.taskId, complete:this.state.complete},
+      data: {taskId: this.props.taskId, complete:!this.state.complete},
       success: function(data) {
         this.setState({data: data});
       }.bind(this),
