@@ -46,15 +46,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/api/tasksdb', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    res.json(JSON.parse(data));
-  });
-});
+
 
 app.get('/api/tasks', function(req, res){
 
@@ -93,6 +85,39 @@ app.get('/api/tasks', function(req, res){
 
 app.put('/api/tasks/', function(req, res) {
   console.log(req.body);
+
+      var task = {
+      id: req.body.id,
+      context: req.body.author,
+      text: req.body.text
+    };
+
+      // Use connect method to connect to the Server
+    MongoClient.connect(url, function (err, db) {
+      if (err) {
+        console.log('Unable to connect to the mongoDB server. Error:', err);
+      } else {
+        //HURRAY!! We are connected. :)
+        console.log('Connection established to', url);
+        console.log('update');
+
+             db.collection('tasks').updateOne(
+              { "context" : "12344"},
+              {
+                $set: { "text": "WHOOOOOO" }
+              }, function(err, results) {
+                console.log(err);
+                console.log("ok:  " + results.ok);
+                console.log("modified:  " + results.nModified);
+              
+           });
+
+        // do some work here with the database.
+
+        //Close connection
+        db.close();
+        }
+    });
   });
 
 app.post('/api/tasks', function(req, res) {
@@ -122,6 +147,7 @@ app.post('/api/tasks', function(req, res) {
 
       // do some work here with the database.
 
+
       //Close connection
       db.close();
     }
@@ -130,31 +156,7 @@ app.post('/api/tasks', function(req, res) {
 
 });
 
-app.post('/api/tasksold', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    var comments = JSON.parse(data);
-    // NOTE: In a real implementation, we would likely rely on a database or
-    // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
-    // treat Date.now() as unique-enough for our purposes.
-    var newComment = {
-      id: Date.now(),
-      author: req.body.author,
-      text: req.body.text
-    };
-    comments.push(newComment);
-    fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-      res.json(comments);
-    });
-  });
-});
+
 
 
 app.listen(app.get('port'), function() {

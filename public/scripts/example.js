@@ -30,7 +30,7 @@ var TaskCheckbox = React.createClass({
     console.log(this.props.taskId);
     this.setState({complete: !this.state.complete});
 
-     if(this.state.complete)
+     //if(this.state.complete)
       $.ajax({
       url: this.props.url,
       dataType: 'json',
@@ -171,6 +171,6 @@ var TaskForm = React.createClass({
 });
 
 ReactDOM.render(
-  <TaskBox url="/api/tasks" pollInterval={20000} />,
+  <TaskBox url="/api/tasks" pollInterval={200000} />,
   document.getElementById('content')
 );
